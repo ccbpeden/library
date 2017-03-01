@@ -4,7 +4,7 @@
     * @backupStaticAttributes disabled
     */
     require_once "src/Book.php";
-    // require_once "src/Task.php";
+    require_once "src/Author.php";
     $server = 'mysql:host=localhost:8889;dbname=library_test';
     $username = 'root';
     $password = 'root';
@@ -13,8 +13,9 @@
     {
         protected function tearDown()
         {
-        //   Student::deleteAll();
-        //   Task::deleteAll();
+          Book::deleteAll();
+          Author::deleteAll();
+          Author::deletefromJoinTable();
         }
         function test_Book_setters_getters_constructor()
         {
@@ -26,61 +27,79 @@
             // Assert
                 $this->assertEquals([$title, $id], $actual_result);
         }
-        // function test_Student_save_getAll_deleteAll()
-        // {
-        //     // Arrange
-        //     $book1 = new Student('John Smith', '2017-02-28');
-        //     $student2 = new Student('Tom Smith', '2017-02-27');
-        //     $student3 = new Student('Jane Smith', '2017-02-26');
-        //     // Act
-        //     $student1->save();
-        //     Student::deleteAll();
-        //     $student2->save();
-        //     $student3->save();
-        //     $all_students = Student::getAll();
-        //     // Assert
-        //     $this->assertEquals([$student2, $student3], $all_students);
-        // }
-        // function test_Student_update()
-        // {
-        //     // Arrange
-        //     $student1 = new Student('Tom Smith', '2017-02-27');
-        //     $student1->save();
-        //     // Act
-        //     $student1->update('Tom Smythe', '2017-01-27');
-        //     $all_students = Student::getAll();
-        //     // Assert
-        //     $this->assertEquals(
-        //         'Tom Smythe|2017-01-27',
-        //         $all_students[0]->getTitle() . '|' . $all_students[0]->getDateOfEnrollment()
-        //     );
-        // }
-        // function test_Student_find()
-        // {
-        //     // Arrange
-        //     $student1 = new Student('John Smith', '2017-02-28');
-        //     $student2 = new Student('Tom Smith', '2017-02-27');
-        //     $student1->save();
-        //     $student2->save();
-        //     // Act
-        //     $result = Student::find($student2->getId());
-        //     // Assert
-        //     $this->assertEquals($student2, $result);
-        // }
-        // function testDeleteStudent()
-        // {
-        //     //Arrange
-        //     $student1 = new Student('John Smith', '2017-02-28');
-        //     $student2 = new Student('Tom Smith', '2017-02-27');
-        //     $student3 = new Student('Jane Smith', '2017-02-26');
-        //     $student1->save();
-        //     $student2->save();
-        //     $student3->save();
-        //     // Act
-        //     $student2->delete();
-        //     //Assert
-        //     $this->assertEquals([$student1, $student3], Student::getAll());
-        // }
+        function test_Book_save_getAll_deleteAll()
+        {
+            // Arrange
+            $book1 = new Book('John Smith');
+            $book2 = new Book('Tom Smith');
+            $book3 = new Book('Jane Smith');
+            // Act
+            $book1->save();
+            Book::deleteAll();
+            $book2->save();
+            $book3->save();
+            $all_books = Book::getAll();
+            // Assert
+            $this->assertEquals([$book2, $book3], $all_books);
+        }
+        function test_Book_update()
+        {
+            // Arrange
+            $book1 = new Book('Tom Smith');
+            $book1->save();
+            // Act
+            $book1->update('Tom Smythe');
+            $all_books = Book::getAll();
+            // Assert
+            $this->assertEquals(
+                'Tom Smythe',
+                $all_books[0]->getTitle()
+            );
+        }
+        function test_Book_find()
+        {
+            // Arrange
+            $book1 = new Book('John Smith');
+            $book2 = new Book('Tom Smith');
+            $book1->save();
+            $book2->save();
+            // Act
+            $result = Book::find($book2->getId());
+            // Assert
+            $this->assertEquals($book2, $result);
+        }
+        function testDeleteBook()
+        {
+            //Arrange
+            $book1 = new Book('John Smith');
+            $book2 = new Book('Tom Smith');
+            $book3 = new Book('Jane Smith');
+            $book1->save();
+            $book2->save();
+            $book3->save();
+            // Act
+            $book2->delete();
+            //Assert
+            $this->assertEquals([$book1, $book3], Book::getAll());
+        }
+        function test_AddAuthor_GetAuthors()
+        {
+            $book = new Book('Harry Potter');
+            $book->save();
+            $author = new Author('J.K Rowling');
+            $author->save();
+            $book2 = new Book ('Lord of the Rings');
+            $book2->save();
+            $author2= new Author('Tolkien');
+            $author2->save();
+
+            $book->addAuthor($author->getId());
+            $book2->addAuthor($author2->getId());
+
+            $result= $book->getAuthors();
+
+            $this->assertEquals([$author], $result);
+        }
 
     }
 ?>
