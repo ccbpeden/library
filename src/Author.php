@@ -81,6 +81,22 @@ Class Author
         $GLOBALS['DB'] -> exec("DELETE FROM authors WHERE id = {$this->getId()};");
         $GLOBALS['DB']-> exec("DELETE FROM authors_books WHERE author_id= {$this->getId()};");
     }
+    function addBook($new_book_id)
+    {
+        $GLOBALS['DB']->exec("INSERT INTO authors_books(book_id,author_id) VALUES({$new_book_id}, {$this->getId()});");
+    }
+    function getBooks()
+    {
+        $returned_books= $GLOBALS['DB']->query("SELECT books.* FROM authors JOIN authors_books ON (authors_books.author_id= authors.id) JOIN books ON (authors_books.book_id= books.id)  WHERE authors.id= {$this->getId()};");
+        $output_books= array();
+        foreach ($returned_books as $book) {
+            $title= $book['title'];
+            $id= $book['id'];
+            $new_book= new Book($title, $id);
+            array_push($output_books, $new_book);
+        }
+        return $output_books;
+    }
 }
 
  ?>

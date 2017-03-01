@@ -82,5 +82,23 @@
             //Assert
             $this->assertEquals([$author1, $author3], Author::getAll());
         }
+        function test_AddAuthor_GetAuthors()
+        {
+            $book = new Book('Harry Potter');
+            $book->save();
+            $author = new Author('J.K Rowling');
+            $author->save();
+            $book2 = new Book ('Lord of the Rings');
+            $book2->save();
+            $author2= new Author('Tolkien');
+            $author2->save();
+
+            $author->addBook($book->getId());
+            $author2->addBook($book2->getId());
+
+            $result= $author2->getBooks();
+
+            $this->assertEquals([$book2], $result);
+        }
 
     }
