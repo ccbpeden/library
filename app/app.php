@@ -5,6 +5,7 @@
     require_once __DIR__."/../src/Author.php";
     require_once __DIR__."/../src/Checkout.php";
     require_once __DIR__."/../src/Patron.php";
+    require_once __DIR__."/../src/Copy.php";
     use Symfony\Component\HttpFoundation\Request;
     Request::enableHttpMethodParameterOverride();
     $server = 'mysql:host=localhost:8889;dbname=library';
@@ -13,6 +14,10 @@
     $DB = new PDO($server, $username, $password);
     $app = new Silex\Application();
     $app['debug'] = true;
+
+    use Symfony\Component\Debug\Debug;
+    Debug::enable();
+
     $app->register(
         new Silex\Provider\TwigServiceProvider(),
         array('twig.path' => __DIR__.'/../views')
@@ -23,25 +28,30 @@
     });
 
     $app->get("/librarian", function() use ($app) {
-        return $app['twig']->render('librarian.html.twig', array('books'=>Book::getAll(), 'copies'=>Copy::getAll()));
+        return $app['twig']->render('librarian.html.twig', array('foundbook'=>null, 'foundcopies'=>null, 'foundcheckouts'=>null, 'result'=>null));
     });
 
     $app->post("/addbook", function() use ($app) {
         $book_name = $_POST['name'];
         $author_name = $_POST['author'];
         $result = Book::newBook($book_name, $author_name);
-        // if ($result == 0)
-        // {
-        //     //render success created new copy
-        // } elseif ($result == 1)
-        // {
-        //     //render success created new book & copy
-        // } elseif ($result == 2)
-        // {
-        //     //render created new author, book, copy
-        // }
-        return $app['twig']->render('librarian.html.twig', array('result'=>$result));
+        return $app['twig']->render('librarian.html.twig', array('foundbook'=>null, 'foundcopies'=>null, 'foundcheckouts'=>null, 'result'=>$result));
 
+    });
+    $app->post("/searchtitle", function() use($app){
+
+        $foundbook = Book::findbyName($_POST['title']);
+        $foundcopies = Copy::findbookid($foundbook->getId());
+        $foundcheckouts = array();
+        foreach($foundcopies as $foundcopy)
+        {
+            $foundcheckout = Checkout::findcopyid($foundcopy->getId());
+            array_push($foundcheckouts, $foundcheckout);
+        }
+        return $app['twig']->render('librarian.html.twig', array('foundbook'=>$foundbook, 'foundcopies'=>$foundcopies, 'foundcheckouts'=>$foundcheckouts, 'result'=>null));
+    });
+    $app->get("/patron", function() use ($app){
+        return $app['twig']->render('patron.html.twig');
     });
 
     return $app;

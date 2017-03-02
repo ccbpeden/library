@@ -1,4 +1,4 @@
-{%extends 'base.html.twig'%}
+%extends 'base.html.twig'%}
 {% block page %}
 <div class="">
     <h3>Add a book to the library!</h3>
@@ -9,5 +9,9 @@
         <input type="text" name="author" value="">
         <button type="submit" name="button">Submit</button>
     </form>
+
+    {%if result is not empty%}
+    {{result}}
+    {%endif%}
 </div>
 {%endblock%}

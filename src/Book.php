@@ -131,14 +131,17 @@ Class Book
             {
                 $new_copy = new Copy($bookexists->getId(), $status = 1);
                 $new_copy->save();
-                return 0;
+                $result= "A new copy of this book has been created.";
+                return $result;
             } else {
                 $new_book = new Book($book_name);
                 $new_book->save();
                 $new_book->addAuthor($authorexists->getId());
                 $new_copy = new Copy($new_book->getId(), $status = 1);
                 $new_copy->save();
-                return 1;
+                $result = "A new book has been added to the system.";
+                return $result;
+
             }
         } else {
             $new_author = new Author($author_name);
@@ -148,7 +151,8 @@ Class Book
             $new_book->addAuthor($new_author->getId());
             $new_copy = new Copy($new_book->getId(), $status = 1);
             $new_copy->save();
-            return 2;
+            $result= "a new Author and book have been added to the system.";
+            return $result;
         }
     }
 }

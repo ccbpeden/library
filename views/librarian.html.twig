@@ -1,0 +1,46 @@
+{%extends 'base.html.twig'%}
+{% block page %}
+<div class="">
+    <h3>Add a book to the library!</h3>
+    <form class="" action="/addbook" method="post">
+        <label for="name">Book Name</label>
+        <input type="text" name="name" value="">
+        <label for="author">Book Author</label>
+        <input type="text" name="author" value="">
+        <button type="submit" name="button">Submit</button>
+    </form>
+
+    {%if result is not empty%}
+    {{result}}
+    {%endif%}
+</div>
+<div class="">
+    <h2>Search for a book(by title):</h2>
+    <form class="" action="/searchtitle" method="post">
+        <label for="title">Enter a title</label>
+        <input type="text" name="title" value="">
+        <br>
+        <button type="submit" name="button">Search</button>
+    </form>
+    {%if foundbook and foundcopies%}
+    {{foundbook.getTitle}}
+    {{foundbook.getAuthors}}
+
+    {%for copy in foundcopies%}
+    <p>The copy id is {{copy.getId}}.</p>
+
+        {%if status%}
+        <p>Copy is currently not checked out.</p>
+        {%else%}
+        <p>Copy is currently checked out.</p>
+        {%endif%}
+        {%for checkout in checkouts%}
+        <p>{{checkout.getPatronName}} checked out this copy.</p>
+        <p>This copy was returned on {{checkout.getReturn_Date}}</p>
+        <p>This copy was due on {{checkout.getDue_Date}}</p>
+        {%endfor%}
+
+    {%endfor%}
+    {%endif%}
+</div>
+{%endblock%}

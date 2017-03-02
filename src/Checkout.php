@@ -116,6 +116,30 @@
                 }
             }
         }
+        static function findcopyid($input_id)
+        {
+            $returned_checkouts = Checkout::getAll();
+            foreach($returned_checkouts as $returned_checkout)
+            {
+                $returned_id = $returned_checkout->getCopy_id();
+                if($returned_id == $input_id)
+                {
+                    return $returned_checkout;
+                }
+            }
+        }
+        function getPatronName()
+        {
+            $all_patrons = Patron::getAll();
+            foreach($all_patrons as $patron)
+            {
+                $patron_id = $patron->getId();
+                if($patron_id = $this->getPatron_id())
+                {
+                    return $patron->getName();
+                }
+            }
+        }
 
         function delete()
         {

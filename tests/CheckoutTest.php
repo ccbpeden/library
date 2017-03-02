@@ -135,5 +135,22 @@
 
             $this->assertEquals([$checkout1], $result);
         }
+
+        function test_getPatronName()
+        {
+            $patron1 = new Patron('John Smith');
+            $patron1->save();
+            $patron_id = $patron1->getId();
+            $copy_id = 1;
+            $due_date = "02/12/2018";
+            $return_date = "02/19/2018";
+            $id = 1;
+            $checkout1 = new checkout($patron_id, $copy_id, $due_date, $return_date, $id);
+            $checkout1->save();
+
+            $result = $checkout1->getPatronName();
+
+            $this->assertEquals($patron1->getName(), $result);
+        }
     }
 ?>

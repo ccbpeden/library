@@ -92,6 +92,18 @@
         {
             $GLOBALS['DB'] -> exec("DELETE FROM copies WHERE id = {$this->getId()};");
         }
+        static function findbookid($input_id)
+        {
+            $returned_copies = Copy::getAll();
+            foreach($returned_copies as $returned_copy)
+            {
+                $returned_bookid = $returned_copy->getBook_id();
+                if($returned_bookid == $input_id)
+                {
+                    return $returned_copy;
+                }
+            }
+        }
 
 
 
