@@ -28,19 +28,43 @@
     });
 
     $app->get("/librarian", function() use ($app) {
-        return $app['twig']->render('librarian.html.twig', array('foundbook'=>null, 'foundcopies'=>null, 'foundcheckouts'=>null, 'result'=>null));
+        return $app['twig']->render('librarian.html.twig', array('foundauthor'=>null, 'foundbooks'=>null,'foundbook'=>null,'foundauthors'=>null, 'foundcopies'=>null, 'foundcheckouts'=>null, 'result'=>null));
     });
 
     $app->post("/addbook", function() use ($app) {
         $book_name = $_POST['name'];
         $author_name = $_POST['author'];
         $result = Book::newBook($book_name, $author_name);
-        return $app['twig']->render('librarian.html.twig', array('foundbook'=>null, 'foundcopies'=>null, 'foundcheckouts'=>null, 'result'=>$result));
+        return $app['twig']->render('librarian.html.twig', array('foundauthor'=>null, 'foundbooks'=>null,'foundbook'=>null, 'foundauthors'=>null, 'foundcopies'=>null, 'foundcheckouts'=>null, 'result'=>$result));
 
     });
     $app->post("/searchtitle", function() use($app){
 
         $foundbook = Book::findbyName($_POST['title']);
+        $foundauthors = $foundbook->getAuthors();
+        $foundbookid = $foundbook->getId();
+        $foundcopies = Copy::findbookid($foundbookid);
+        $foundcheckouts = array();
+        foreach($foundcopies as $foundcopy)
+        {
+            $foundcheckout = Checkout::findcopyid($foundcopy->getId());
+            if (isset($foundcheckout))
+            {
+                array_push($foundcheckouts, $foundcheckout);
+            }
+        }
+        var_dump($foundcheckouts);
+        return $app['twig']->render('librarian.html.twig', array('foundauthor'=>null, 'foundbooks'=>null,'foundbook'=>$foundbook,'foundauthors'=>$foundauthors, 'foundcopies'=>$foundcopies, 'foundcheckouts'=>$foundcheckouts, 'result'=>null));
+    });
+
+    $app->post("/searchauthor", function() use ($app){
+        $foundauthor = Author::findbyName($_POST['author']);
+        $foundbooks = $foundauthor->getBooks();
+        return $app['twig']->render('librarian.html.twig', array('foundauthor'=>$foundauthor, 'foundbooks'=>$foundbooks,'foundbook'=>null,'foundauthors'=>null, 'foundcopies'=>null, 'foundcheckouts'=>null, 'result'=>null));
+
+    });
+    $app->get('/bookinfo/{id}', function($id) use($app){
+        $foundbook = Book::find($id);
         $foundcopies = Copy::findbookid($foundbook->getId());
         $foundcheckouts = array();
         foreach($foundcopies as $foundcopy)
@@ -48,7 +72,7 @@
             $foundcheckout = Checkout::findcopyid($foundcopy->getId());
             array_push($foundcheckouts, $foundcheckout);
         }
-        return $app['twig']->render('librarian.html.twig', array('foundbook'=>$foundbook, 'foundcopies'=>$foundcopies, 'foundcheckouts'=>$foundcheckouts, 'result'=>null));
+        return $app['twig']->render('bookinfo.html.twig',array( 'foundbooks'=>null,'foundbook'=>$foundbook,'foundauthors'=>null, 'foundcopies'=>$foundcopies, 'foundcheckouts'=>$foundcheckouts, 'result'=>null));
     });
     $app->get("/patron", function() use ($app){
         return $app['twig']->render('patron.html.twig');

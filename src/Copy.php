@@ -95,18 +95,16 @@
         static function findbookid($input_id)
         {
             $returned_copies = Copy::getAll();
+            $output_copies = array();
             foreach($returned_copies as $returned_copy)
             {
                 $returned_bookid = $returned_copy->getBook_id();
                 if($returned_bookid == $input_id)
                 {
-                    return $returned_copy;
+                    array_push($output_copies, $returned_copy);
                 }
             }
+            return $output_copies;
         }
-
-
-
-
     }
 ?>

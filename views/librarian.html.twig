@@ -10,37 +10,67 @@
         <button type="submit" name="button">Submit</button>
     </form>
 
-    {%if result is not empty%}
+    {% if result is not empty %}
     {{result}}
-    {%endif%}
+    {% endif %}
 </div>
 <div class="">
-    <h2>Search for a book(by title):</h2>
+    <h3>Search for a book(by title):</h3>
     <form class="" action="/searchtitle" method="post">
         <label for="title">Enter a title</label>
         <input type="text" name="title" value="">
         <br>
         <button type="submit" name="button">Search</button>
     </form>
-    {%if foundbook and foundcopies%}
-    {{foundbook.getTitle}}
-    {{foundbook.getAuthors}}
+    {% if foundbook %}
+        {{foundbook.getTitle}}
 
-    {%for copy in foundcopies%}
-    <p>The copy id is {{copy.getId}}.</p>
-
-        {%if status%}
-        <p>Copy is currently not checked out.</p>
-        {%else%}
-        <p>Copy is currently checked out.</p>
-        {%endif%}
-        {%for checkout in checkouts%}
-        <p>{{checkout.getPatronName}} checked out this copy.</p>
-        <p>This copy was returned on {{checkout.getReturn_Date}}</p>
-        <p>This copy was due on {{checkout.getDue_Date}}</p>
-        {%endfor%}
-
+        {% for author in foundauthors %}
+        Author: {{author.getName}}
+        {% endfor%}
+        {% if foundcopies %}
+        <h2>yes foundcopies</h2>
+            {% for foundcopy in foundcopies %}
+                <h3>Testing</h3>
+                <p>The foundcopy id is {{foundcopy.getId}}.</p>
+                {% if foundcopy.getStatus %}
+                <p>Copy is currently not checked out.</p>
+                {% else %}
+                <p>Copy is currently checked out.</p>
+                {% endif %}
+                {% for foundcheckout in foundcheckouts %}
+                    {% if foundcheckout.getCopy_id == foundcopy.getId %}
+                        <p>{{foundcheckout.getPatronName}} checked out this copy.</p>
+                        <p>This copy was returned on {{foundcheckout.getReturn_Date}}</p>
+                        <p>This copy was due on {{foundcheckout.getDue_Date}}</p>
+                    {% else %}
+                        <p>This book has never been checked out.</p>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+        <p>NOPE NOPE NOPE</p>
+        {% endif %}
+    {% endif %}
+</div>
+<div class="">
+    <h3>Search for a book by author:</h3>
+    <form class="" action="/searchauthor" method="post">
+        <label for="author">Enter an author</label>
+        <input type="text" name="author" value="">
+        <br>
+        <button type="submit" name="button">Search</button>
+    </form>
+    {%if foundauthor%}
+    These are the books from {{foundauthor.getName}}:
+    {%for book in foundbooks%}
+    <ul>
+        <a href="/bookinfo/{{book.getId}}"><li>{{book.getTitle}}</li></a>
+    </ul>
     {%endfor%}
+    {%else%}
+    <p> No books by this author. </p>
     {%endif%}
 </div>
+
 {%endblock%}

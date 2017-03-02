@@ -1,0 +1,26 @@
+{%extends 'base.html.twig'%}
+{% block page %}
+<div class="">
+
+    {%if foundbook and foundcopies%}
+    {{foundbook.getTitle}}
+    
+    {%for copy in foundcopies%}
+    <p>The copy id is {{copy.getId}}.</p>
+
+        {%if status%}
+        <p>Copy is currently not checked out.</p>
+        {%else%}
+        <p>Copy is currently checked out.</p>
+        {%endif%}
+        {%for checkout in checkouts%}
+        <p>{{checkout.getPatronName}} checked out this copy.</p>
+        <p>This copy was returned on {{checkout.getReturn_Date}}</p>
+        <p>This copy was due on {{checkout.getDue_Date}}</p>
+        {%endfor%}
+
+    {%endfor%}
+    {%endif%}
+</div>
+
+{%endblock%}
