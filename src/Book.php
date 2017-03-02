@@ -94,6 +94,62 @@ Class Book
         }
         return $output_authors;
     }
-}
+    function getCopies()
+    {
+        $returned_copies = $GlOBALS['DB']->query("SELECT copies.* FROM books JOIN copies on(copies.book_id= book.id) WHERE book.id= {$this->getId()};");
+        $output_copies= array();
+        foreach ($returned_copies as $copy) {
+            $status = $copy['status'];
+            $book_id= $copy['book_id'];
+            $id= $copy['id'];
+            $new_copy= new Copy($book_id, $status, $id);
+            array_push($output_copies, $new_copy);
+        }
+        return $output_copies;
+    }
 
+    static function findbyName($book_title)
+    {
+        $all_books = Book::getAll();
+        foreach ($all_books as $book)
+        {
+            $returned_book_title = $book->getTitle();
+            if($returned_book_title == $book_title)
+            {
+                return $book;
+            }
+        }
+    }
+
+    static function newBook($book_name, $author_name)
+    {
+        $authorexists = Author::findbyName($author_name);
+        $bookexists = Book::findbyName($book_name);
+        if($authorexists)
+        {
+            if($bookexists)
+            {
+                $new_copy = new Copy($bookexists->getId(), $status = 1);
+                $new_copy->save();
+                return 0;
+            } else {
+                $new_book = new Book($book_name);
+                $new_book->save();
+                $new_book->addAuthor($authorexists->getId());
+                $new_copy = new Copy($new_book->getId(), $status = 1);
+                $new_copy->save();
+                return 1;
+            }
+        } else {
+            $new_author = new Author($author_name);
+            $new_author->save();
+            $new_book = new Book($book_name);
+            $new_book->save();
+            $new_book->addAuthor($new_author->getId());
+            $new_copy = new Copy($new_book->getId(), $status = 1);
+            $new_copy->save();
+            return 2;
+        }
+    }
+}
  ?>

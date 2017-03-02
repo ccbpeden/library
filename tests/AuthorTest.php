@@ -101,4 +101,19 @@
             $this->assertEquals([$book2], $result);
         }
 
+        function test_findbyName()
+        {
+            $author1 = new Author('John Smith');
+            $author2 = new Author('Tom Smith');
+            $author3 = new Author('Jane Smith');
+            $author1->save();
+            $author2->save();
+            $author3->save();
+
+            $result = Author::findbyName('Tom Smith');
+
+            $this->assertEquals($author2, $result);
+
+        }
+
     }

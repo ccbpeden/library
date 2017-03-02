@@ -97,6 +97,18 @@ Class Author
         }
         return $output_books;
     }
+
+    static function findbyName($input_name)
+    {
+        $all_authors = Author::getAll();
+        foreach ($all_authors as $author) {
+            $author_name = $author->getName();
+            if($author_name == $input_name)
+            {
+                return $author;
+            }
+        }
+    }
 }
 
  ?>

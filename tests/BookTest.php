@@ -101,5 +101,33 @@
             $this->assertEquals([$author], $result);
         }
 
+        function test_findbyName()
+        {
+            $book1 = new Book('John Smith');
+            $book2 = new Book('Tom Smith');
+            $book3 = new Book('Jane Smith');
+            $book1->save();
+            $book2->save();
+            $book3->save();
+
+            $result = Book::findbyName('Tom Smith');
+
+            $this->assertEquals($result, $book2);
+        }
+
+        function test_newBook()
+        {
+            $book = new Book('The Scorcerer stone');
+            $book->save();
+            $author = new Author('J.K Rowling');
+            $author->save();
+            Book::newBook('Gone with the wind', 'Margaret Mead');
+
+            $result = Copy::getAll();
+
+            $this->assertEquals(isset($result), true);
+
+        }
+
     }
 ?>
