@@ -70,7 +70,10 @@
         foreach($foundcopies as $foundcopy)
         {
             $foundcheckout = Checkout::findcopyid($foundcopy->getId());
-            array_push($foundcheckouts, $foundcheckout);
+            if (isset($foundcheckout))
+            {
+                array_push($foundcheckouts, $foundcheckout);
+            }
         }
         return $app['twig']->render('bookinfo.html.twig',array( 'foundbooks'=>null,'foundbook'=>$foundbook,'foundauthors'=>null, 'foundcopies'=>$foundcopies, 'foundcheckouts'=>$foundcheckouts, 'result'=>null));
     });

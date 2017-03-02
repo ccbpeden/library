@@ -4,21 +4,24 @@
 
     {%if foundbook and foundcopies%}
     {{foundbook.getTitle}}
-    
+
     {%for copy in foundcopies%}
     <p>The copy id is {{copy.getId}}.</p>
 
-        {%if status%}
+        {%if copy.getStatus %}
         <p>Copy is currently not checked out.</p>
         {%else%}
         <p>Copy is currently checked out.</p>
         {%endif%}
-        {%for checkout in checkouts%}
-        <p>{{checkout.getPatronName}} checked out this copy.</p>
-        <p>This copy was returned on {{checkout.getReturn_Date}}</p>
-        <p>This copy was due on {{checkout.getDue_Date}}</p>
-        {%endfor%}
-
+        {% if foundcheckouts %}
+            {%for checkout in foundcheckouts%}
+            <p>{{checkout.getPatronName}} checked out this copy.</p>
+            <p>This copy was returned on {{checkout.getReturn_Date}}</p>
+            <p>This copy was due on {{checkout.getDue_Date}}</p>
+            {%endfor%}
+        {% else %}
+        <p>This book has never been checked out</p>
+        {% endif %}
     {%endfor%}
     {%endif%}
 </div>

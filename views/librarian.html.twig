@@ -29,9 +29,7 @@
         Author: {{author.getName}}
         {% endfor%}
         {% if foundcopies %}
-        <h2>yes foundcopies</h2>
             {% for foundcopy in foundcopies %}
-                <h3>Testing</h3>
                 <p>The foundcopy id is {{foundcopy.getId}}.</p>
                 {% if foundcopy.getStatus %}
                 <p>Copy is currently not checked out.</p>
@@ -49,7 +47,7 @@
                 {% endfor %}
             {% endfor %}
         {% else %}
-        <p>NOPE NOPE NOPE</p>
+        <p>Peculiarly, there are no copies of this book.</p>
         {% endif %}
     {% endif %}
 </div>
