@@ -78,6 +78,18 @@ Class Patron
 
     }
 
+    function checkoutBook($copy_id, $due_date, $return_date)
+    {
+        $GLOBALS['DB']->exec("INSERT INTO checkouts (copy_id, due_date, return_date) where patron_id = {$this->getId()}");
+    }
+
+    function getAllCheckouts()
+    {
+        $returned_checkouts = $GLOBALS['DB']->query("SELECT books.* copies.* checkouts.* FROM patrons JOIN checkouts ON (patrons.id = checkouts.patron_id) JOIN copies ON (checkouts.copy_id = copies.id) JOIN books ON (copies.book_id = books.id) WHERE patrons.id = {$this->getId()};");
+
+    }
+
+
 }
 
  ?>

@@ -81,6 +81,9 @@
             //Assert
             $this->assertEquals([$patron1, $patron3], Patron::getAll());
         }
-    
+
+
+
+
 
     }
