@@ -82,7 +82,7 @@
         return $app['twig']->render('patron.html.twig', array('copies'=>$copies));
     });
     $app->post("/checkout", function($id) use ($app){
-        $return_date= 
+        $return_date= n$_POST['heckout']
         return $app['twig']->render('patron.html.twig', array('copies'=>$copies));
     });
 

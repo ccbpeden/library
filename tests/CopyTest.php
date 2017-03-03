@@ -107,7 +107,7 @@
             $book->save();
             $book_id = $book->getId();
             $author->addbook($book_id);
-            $copy1 = New Copy($book_id, 1, 1);
+            $copy1 = New Copy($book_id, 1);
             $copy1->save();
 
             $result = $copy1->getAuthor();
