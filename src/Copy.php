@@ -124,9 +124,8 @@
         function getAuthor()
         {
             $returned_author = $GLOBALS['DB']->query("SELECT authors.* FROM copies JOIN books ON (copies.book_id = books.id) JOIN authors_books ON (authors_books.book_id= books.id) JOIN authors ON (authors_books.author_id= authors.id) WHERE copies.id = {$this->getId()};");
-            $intermediate = $returned_author->fetch(PDO::FETCH_OBJ);
-            $result = $intermediate->name;
-            var_dump($result);
+            $intermediate = $returned_author->fetch(PDO::FETCH_ASSOC);
+            $result = $intermediate['name'];
             return $result;
 
 

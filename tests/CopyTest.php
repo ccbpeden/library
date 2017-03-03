@@ -110,6 +110,18 @@
             $copy1 = New Copy($book_id, 1);
             $copy1->save();
 
+
+            $authorname2 = "Maupassant";
+            $author2 = new Author($authorname2);
+            $author2->save();
+            $book2 = new Book("Au rebours");
+            $book2->save();
+            $book_id2 = $book2->getId();
+            $author2->addbook($book_id2);
+            $copy2 = New Copy($book_id2, 1);
+            $copy2->save();
+
+
             $result = $copy1->getAuthor();
 
             $this->assertEquals($authorname, $result);

@@ -8,6 +8,7 @@
     <table>
         <thead>
               <th>Book</th>
+              <th>Author</th>
               <th>Status</th>
               <th>Checkout</th>
           </thead>
@@ -16,6 +17,7 @@
     {%for copy in copies%}
     <tr>
     <td>{{copy.getTitle}} </td>
+    <td>{{copy.getAuthor}}</td>
     <td>{%if copy.getStatus%}
         <p>available</p>
         {%else%}
