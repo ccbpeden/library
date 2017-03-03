@@ -106,5 +106,27 @@
             }
             return $output_copies;
         }
+
+        function getTitle()
+        {
+            $book_id = $this->getBook_id();
+            $all_books = Book::getAll();
+            foreach($all_books as $returned_book)
+            {
+                $returned_book_id = $returned_book->getId();
+                if($returned_book_id == $book_id)
+                {
+                    $title = $returned_book->getTitle();
+                    return $title;
+                }
+            }
+        }
+        function getAuthor()
+        {
+            $returned_author = $GLOBALS['DB']->query("SELECT authors.name FROM copies JOIN books ON (copies.book_id = books.id) JOIN authors-books ON (authors_books.book_id= books.id) JOIN authors ON (authors_books.author_id= authors.id) WHERE copies.id = {$this->getId()};");
+            var_dump($returned_author);
+
+
+        }
     }
 ?>

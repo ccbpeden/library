@@ -84,5 +84,36 @@
             //Assert
             $this->assertEquals([$copy1, $copy3], Copy::getAll());
         }
+
+        function test_getTitle()
+        {
+            $book = new Book("Peregrine Pickle");
+            $book->save();
+            $book_id = $book->getId();
+            $copy1 = New Copy($book_id, 1, 1);
+            $copy1->save();
+
+            $result = $copy1->getTitle();
+
+            $this->assertEquals("Peregrine Pickle", $result);
+        }
+
+        function test_getAuthor()
+        {
+            $authorname = "Peter Pan";
+            $author = new Author($authorname);
+            $author->save();
+            $book = new Book("Peregrine Pickle");
+            $book->save();
+            $book_id = $book->getId();
+            $author->addbook($book_id);
+            $copy1 = New Copy($book_id, 1, 1);
+            $copy1->save();
+
+            $result = $copy1->getAuthor();
+
+            $this->assertEquals($authorname, $result);
+
+        }
     }
 ?>

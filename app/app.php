@@ -78,7 +78,12 @@
         return $app['twig']->render('bookinfo.html.twig',array( 'foundbooks'=>null,'foundbook'=>$foundbook,'foundauthors'=>null, 'foundcopies'=>$foundcopies, 'foundcheckouts'=>$foundcheckouts, 'result'=>null));
     });
     $app->get("/patron", function() use ($app){
-        return $app['twig']->render('patron.html.twig');
+        $copies = Copy::getAll();
+        return $app['twig']->render('patron.html.twig', array('copies'=>$copies));
+    });
+    $app->post("/checkout", function($id) use ($app){
+        $return_date= 
+        return $app['twig']->render('patron.html.twig', array('copies'=>$copies));
     });
 
     return $app;

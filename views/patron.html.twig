@@ -1,17 +1,41 @@
-%extends 'base.html.twig'%}
+{%extends 'base.html.twig'%}
 {% block page %}
 <div class="">
-    <h3>Add a book to the library!</h3>
-    <form class="" action="/addbook" method="post">
-        <label for="name">Book Name</label>
-        <input type="text" name="name" value="">
-        <label for="author">Book Author</label>
-        <input type="text" name="author" value="">
-        <button type="submit" name="button">Submit</button>
-    </form>
+    <h2>Welcome patron!</h2>
+</div>
+<div class="">
+    <h3>Check out a book?</h3>
+    <table>
+        <thead>
+              <th>Book</th>
+              <th>Status</th>
+              <th>Checkout</th>
+          </thead>
+          <tbody>
 
-    {%if result is not empty%}
-    {{result}}
-    {%endif%}
+    {%for copy in copies%}
+    <tr>
+    <td>{{copy.getTitle}} </td>
+    <td>{%if copy.getStatus%}
+        <p>available</p>
+        {%else%}
+        <p>unavailable</p>
+        {%endif%}
+    </td>
+    <td>
+
+        {%if copy.getStatus %}
+        <form class="" action="/checkout" method="post">
+            <input type="hidden" name="checkout" value="{{copy.getId}}">
+            <button type="submit" name="Checkout">check out</button>
+        </form>
+        {%endif%}
+    </td>
+    <br>
+</tr>
+    {%endfor%}
+
+          </tbody>
+    </table>
 </div>
 {%endblock%}
